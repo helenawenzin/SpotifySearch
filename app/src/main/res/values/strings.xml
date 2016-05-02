@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpotifySearch</string>
+    <string name="enter_search">Enter search word here</string>
+    <string name="textOnTop">Find Spotify tracks:</string>
 </resources>

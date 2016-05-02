@@ -13,15 +13,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/textOnTop"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2"
+        android:layout_above="@+id/textSearch"
+        android:layout_alignLeft="@+id/buttonGoFind"
+        android:layout_alignStart="@+id/buttonGoFind"
+        android:layout_marginBottom="58dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_search"
-        android:id="@+id/textView"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:hint="@string/enter_search"
+        android:id="@+id/textSearch"
+        android:layout_above="@+id/buttonGoFind"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="70dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go find tracks!"
+        android:id="@+id/buttonGoFind"
+        android:onClick="goFindTracks"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="185dp" />
 </RelativeLayout>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity implements
     private static final String REDIRECT_URI = "spotifysearch-login://callback";
 
     private Player mPlayer;
+    EditText searchWord;
 
     // Request code that will be used to verify if the result comes from correct activity
     private static final int REQUEST_CODE = 1337;
@@ -52,10 +55,13 @@ public class MainActivity extends Activity implements
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
                     public void onInitialized(Player player) {
-                        mPlayer = player;
-                        mPlayer.addConnectionStateCallback(MainActivity.this);
-                        mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+
+                        searchWord = (EditText) findViewById(R.id.textSearch);
+
+                        //mPlayer = player;
+                        //mPlayer.addConnectionStateCallback(MainActivity.this);
+                        //mPlayer.addPlayerNotificationCallback(MainActivity.this);
+                        //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                     }
 
                     @Override
@@ -65,6 +71,16 @@ public class MainActivity extends Activity implements
                 });
             }
         }
+    }
+
+    public void goFindTracks(View view) {
+        System.out.println("Go button pressed!");
+        System.out.println("SEARCH WORD IS: " + searchWord.getText().toString());
+
+        // Intent intent = new Intent(this, DisplayMessageActivity.class);
+       // String message = getString(R.string.settingsSaveMessage);
+       // intent.putExtra(EXTRA_MESSAGE, message);
+       // startActivity(intent);
     }
 
     @Override

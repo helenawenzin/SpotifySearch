@@ -2,10 +2,8 @@ package com.wenzin.helena.spotifysearch;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -20,16 +18,12 @@ import com.spotify.sdk.android.player.PlayerState;
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
-    // TODO: Replace with your client ID
     private static final String CLIENT_ID = "1eaa887d83324f4baa66d9608f9d8d5b";
-    // TODO: Replace with your redirect URI
     private static final String REDIRECT_URI = "spotifysearch-login://callback";
 
     private Player mPlayer;
 
-
     // Request code that will be used to verify if the result comes from correct activity
-    // Can be any integer
     private static final int REQUEST_CODE = 1337;
 
     @Override

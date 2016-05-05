@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,9 +34,30 @@ public class DisplayTracksActivity extends AppCompatActivity {
         List<Track> tracks = spotifyApiController.getTracksList(searchWord);
         System.out.println("SIZE OF LIST OF TRACKS: " + tracks.size());
         ArrayAdapter<Track> itemsAdapter = getTrackArrayAdapter(tracks);
-        ListView listView = (ListView) findViewById(R.id.list);
+        final ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(itemsAdapter);
 
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // ListView Clicked item index
+                int itemPosition     = position;
+
+                // ListView Clicked item value
+                Track itemValue  = (Track) listView.getItemAtPosition(position);
+
+                // Show Alert
+                Toast.makeText(getApplicationContext(),
+                        "Position :"+itemPosition+"  ListItem : " +itemValue.artists.get(0).name , Toast.LENGTH_LONG)
+                        .show();
+
+            }
+
+        });
     }
 
     @NonNull

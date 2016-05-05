@@ -21,14 +21,16 @@ import com.spotify.sdk.android.player.Spotify;
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
-    private static final String CLIENT_ID = "1eaa887d83324f4baa66d9608f9d8d5b";
+    public static final String CLIENT_ID = "1eaa887d83324f4baa66d9608f9d8d5b";
     private static final String REDIRECT_URI = "spotifysearch-login://callback";
 
     public final static String EXTRA_MESSAGE = "com.wenzin.helena.spotifysearch.MESSAGE";
+    public final static String ACCESS_TOKEN_MESSAGE = "com.wenzin.helena.spotifysearch.ACCESS_TOKEN_MESSAGE";
 
     private Player mPlayer;
     private EditText searchWord;
     private Config playerConfig;
+    private String accessToken;
 
     private SpotifyApiController spotifyApiController;
 
@@ -55,15 +57,14 @@ public class MainActivity extends Activity implements
 
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
+            searchWord = (EditText) findViewById(R.id.textSearch);
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+                accessToken = response.getAccessToken();
+                playerConfig = new Config(this, accessToken, CLIENT_ID);
+                mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
                     public void onInitialized(Player player) {
-
-                        searchWord = (EditText) findViewById(R.id.textSearch);
-
                         //mPlayer = player;
                         //mPlayer.addConnectionStateCallback(MainActivity.this);
                         //mPlayer.addPlayerNotificationCallback(MainActivity.this);
@@ -90,6 +91,7 @@ public class MainActivity extends Activity implements
     private Intent getDisplayTracksIntent() {
         Intent intent = new Intent(this, DisplayTracksActivity.class);
         intent.putExtra(EXTRA_MESSAGE, searchWord.getText().toString());
+        intent.putExtra(ACCESS_TOKEN_MESSAGE, accessToken);
         return intent;
     }
 
@@ -133,4 +135,9 @@ public class MainActivity extends Activity implements
         Spotify.destroyPlayer(this);
         super.onDestroy();
     }
+
+    public Player getmPlayer() {
+        return mPlayer;
+    }
+
 }

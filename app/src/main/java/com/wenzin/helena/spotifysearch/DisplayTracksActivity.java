@@ -13,16 +13,17 @@ import android.widget.Toast;
 
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerNotificationCallback;
+import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
 import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Track;
 
-public class DisplayTracksActivity extends AppCompatActivity {
+public class DisplayTracksActivity extends AppCompatActivity implements PlayerNotificationCallback {
 
     private SpotifyApiController spotifyApiController;
-    private Intent intent;
     private Player player;
 
     @Override
@@ -32,7 +33,7 @@ public class DisplayTracksActivity extends AppCompatActivity {
 
         System.out.println("I have entered DisplayTrackActivity!");
 
-        intent = getIntent();
+        Intent intent = getIntent();
         String searchWord = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         String accessToken = intent.getStringExtra(MainActivity.ACCESS_TOKEN_MESSAGE);
 
@@ -54,21 +55,16 @@ public class DisplayTracksActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                // ListView Clicked item index
-                int itemPosition     = position;
-
                 // ListView Clicked item value
-                Track itemValue  = (Track) listView.getItemAtPosition(position);
+                Track track  = (Track) listView.getItemAtPosition(position);
 
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue.artists.get(0).name , Toast.LENGTH_LONG)
+                        "Now playing: " +track.artists.get(0).name + " - " + track.name, Toast.LENGTH_SHORT)
                         .show();
 
-                player.play(itemValue.uri);
-
+                player.play(track.uri);
             }
-
         });
     }
 
@@ -82,6 +78,7 @@ public class DisplayTracksActivity extends AppCompatActivity {
                 //mPlayer.addPlayerNotificationCallback(MainActivity.this);
                 //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
             }
+
 
             @Override
             public void onError(Throwable throwable) {
@@ -97,5 +94,21 @@ public class DisplayTracksActivity extends AppCompatActivity {
         Track[] trackArray = tracks.toArray(new Track[tracks.size()]);
         TrackAdapter adapter = new TrackAdapter(this, android.R.layout.simple_list_item_1, trackArray);
         return adapter;
+    }
+
+    @Override
+    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+        Log.d("DisplayTracksActivity", "Playback event received: " + eventType.name());
+    }
+
+    @Override
+    public void onPlaybackError(ErrorType errorType, String s) {
+        Log.d("DisplayTracksActivity", "Playback error received: " + errorType.name());
+    }
+
+    @Override
+    protected void onDestroy() {
+        Spotify.destroyPlayer(this);
+        super.onDestroy();
     }
 }

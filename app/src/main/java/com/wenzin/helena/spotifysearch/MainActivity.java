@@ -11,15 +11,13 @@ import android.widget.EditText;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
-import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
-public class MainActivity extends Activity implements
-        PlayerNotificationCallback, ConnectionStateCallback {
+public class MainActivity extends Activity implements ConnectionStateCallback {
 
     public static final String CLIENT_ID = "1eaa887d83324f4baa66d9608f9d8d5b";
     private static final String REDIRECT_URI = "spotifysearch-login://callback";
@@ -27,9 +25,7 @@ public class MainActivity extends Activity implements
     public final static String EXTRA_MESSAGE = "com.wenzin.helena.spotifysearch.MESSAGE";
     public final static String ACCESS_TOKEN_MESSAGE = "com.wenzin.helena.spotifysearch.ACCESS_TOKEN_MESSAGE";
 
-    private Player mPlayer;
     private EditText searchWord;
-    private Config playerConfig;
     private String accessToken;
 
     private SpotifyApiController spotifyApiController;
@@ -61,21 +57,6 @@ public class MainActivity extends Activity implements
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 accessToken = response.getAccessToken();
-                playerConfig = new Config(this, accessToken, CLIENT_ID);
-                mPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-                    @Override
-                    public void onInitialized(Player player) {
-                        //mPlayer = player;
-                        //mPlayer.addConnectionStateCallback(MainActivity.this);
-                        //mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
-                    }
-                });
             }
         }
     }
@@ -119,25 +100,4 @@ public class MainActivity extends Activity implements
     public void onConnectionMessage(String message) {
         Log.d("MainActivity", "Received connection message: " + message);
     }
-
-    @Override
-    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        Log.d("MainActivity", "Playback event received: " + eventType.name());
-    }
-
-    @Override
-    public void onPlaybackError(ErrorType errorType, String errorDetails) {
-        Log.d("MainActivity", "Playback error received: " + errorType.name());
-    }
-
-    @Override
-    protected void onDestroy() {
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
-    }
-
-    public Player getmPlayer() {
-        return mPlayer;
-    }
-
 }

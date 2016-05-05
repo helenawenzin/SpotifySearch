@@ -3,6 +3,8 @@ package com.wenzin.helena.spotifysearch;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,14 +19,24 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 
+import java.util.List;
+import com.wenzin.helena.spotifysearch.SpotifyApiController;
+
+import kaaes.spotify.webapi.android.models.TrackSimple;
+
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
     private static final String CLIENT_ID = "1eaa887d83324f4baa66d9608f9d8d5b";
     private static final String REDIRECT_URI = "spotifysearch-login://callback";
 
+    public final static String EXTRA_MESSAGE = "com.wenzin.helena.spotifysearch.MESSAGE";
+
     private Player mPlayer;
-    EditText searchWord;
+    private EditText searchWord;
+    private Config playerConfig;
+
+    private SpotifyApiController spotifyApiController;
 
     // Request code that will be used to verify if the result comes from correct activity
     private static final int REQUEST_CODE = 1337;
@@ -51,7 +63,7 @@ public class MainActivity extends Activity implements
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
                     public void onInitialized(Player player) {
@@ -77,10 +89,14 @@ public class MainActivity extends Activity implements
         System.out.println("Go button pressed!");
         System.out.println("SEARCH WORD IS: " + searchWord.getText().toString());
 
-        // Intent intent = new Intent(this, DisplayMessageActivity.class);
-       // String message = getString(R.string.settingsSaveMessage);
-       // intent.putExtra(EXTRA_MESSAGE, message);
-       // startActivity(intent);
+        startActivity(getDisplayTracksIntent());
+    }
+
+    @NonNull
+    private Intent getDisplayTracksIntent() {
+        Intent intent = new Intent(this, DisplayTracksActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, searchWord.getText().toString());
+        return intent;
     }
 
     @Override

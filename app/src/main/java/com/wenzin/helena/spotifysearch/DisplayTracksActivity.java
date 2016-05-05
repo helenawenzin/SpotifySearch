@@ -2,7 +2,10 @@ package com.wenzin.helena.spotifysearch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.List;
 
@@ -27,5 +30,17 @@ public class DisplayTracksActivity extends AppCompatActivity {
         spotifyApiController = new SpotifyApiController();
         List<Track> tracks = spotifyApiController.getTracksList(searchWord);
         System.out.println("SIZE OF LIST OF TRACKS: " + tracks.size());
+        ArrayAdapter<Track> itemsAdapter = getTrackArrayAdapter(tracks);
+        ListView listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(itemsAdapter);
+
+    }
+
+    @NonNull
+    private ArrayAdapter<Track> getTrackArrayAdapter(List<Track> tracks) {
+        //Convert list of tracks to array of tracks
+        Track[] trackArray = tracks.toArray(new Track[tracks.size()]);
+        TrackAdapter adapter = new TrackAdapter(this, android.R.layout.simple_list_item_1, trackArray);
+        return adapter;
     }
 }

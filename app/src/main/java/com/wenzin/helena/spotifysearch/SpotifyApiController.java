@@ -3,8 +3,10 @@ package com.wenzin.helena.spotifysearch;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -24,12 +26,16 @@ public class SpotifyApiController {
         List<Track> tracks = new ArrayList<>();
         Hashtable<String,String> params = new Hashtable<String,String>();
         params.put("word", searchWord);
-
-        GogetTracks goGetTracksFromSpotify = new GogetTracks();
+        params.put("offset", String.valueOf(0));
 
         try {
+            GogetTracks goGetTracksFromSpotify = new GogetTracks();
             result = goGetTracksFromSpotify.execute(params).get();
             tracks = result.tracks.items;
+            params.put("offset", String.valueOf(50));
+            goGetTracksFromSpotify = new GogetTracks();
+            result = goGetTracksFromSpotify.execute(params).get();
+            tracks.addAll(result.tracks.items);
         } catch (InterruptedException e) {
             // TODO Implement exception handling
             e.printStackTrace();
@@ -47,8 +53,12 @@ public class SpotifyApiController {
         @Override
         protected TracksPager doInBackground(Hashtable<String,String>... params) {
 
+            Map<String, Object> map = new HashMap<>();
+            map.put("offset", params[0].get("offset"));
+            map.put("limit", 50);
+
             try {
-               tracks = api.getService().searchTracks(params[0].get("word"));
+               tracks = api.getService().searchTracks(params[0].get("word"), map);
             } catch (Exception e) {
                 e.printStackTrace();
             }

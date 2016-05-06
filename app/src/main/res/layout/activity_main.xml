@@ -9,6 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.wenzin.helena.spotifysearch.MainActivity">
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/spotify_icon" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +39,7 @@
         android:text="Go find tracks!"
         android:id="@+id/buttonGoFind"
         android:onClick="goFindTracks"
+        android:layout_marginBottom="22dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="185dp" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

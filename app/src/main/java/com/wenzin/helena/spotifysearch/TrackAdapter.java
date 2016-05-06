@@ -19,7 +19,7 @@ public class TrackAdapter extends ArrayAdapter<Track> {
         View view = super.getView(position, convertView, parent);
         Track item = getItem(position);
         TextView textView = (TextView)view;
-        textView.setText("Artist: " + item.artists.get(0).name + "  Song: " + item.name);
+        textView.setText("ARTIST: " + item.artists.get(0).name + "  SONG: " + item.name);
         return view;
     }
 

@@ -12,10 +12,6 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
-import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.Spotify;
 
 public class MainActivity extends Activity implements ConnectionStateCallback {
 
@@ -51,7 +47,10 @@ public class MainActivity extends Activity implements ConnectionStateCallback {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        // Check if result comes from the correct activity
+        checkRequestCodeAndSaveSearchwordAndAccessToken(requestCode, resultCode, intent);
+    }
+
+    private void checkRequestCodeAndSaveSearchwordAndAccessToken(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE) {
             searchWord = (EditText) findViewById(R.id.textSearch);
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
@@ -62,9 +61,6 @@ public class MainActivity extends Activity implements ConnectionStateCallback {
     }
 
     public void goFindTracks(View view) {
-        System.out.println("Go button pressed!");
-        System.out.println("SEARCH WORD IS: " + searchWord.getText().toString());
-
         startActivity(getDisplayTracksIntent());
     }
 

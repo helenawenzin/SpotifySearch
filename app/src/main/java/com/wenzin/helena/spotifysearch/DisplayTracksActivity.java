@@ -25,28 +25,31 @@ public class DisplayTracksActivity extends AppCompatActivity implements PlayerNo
 
     private SpotifyApiController spotifyApiController;
     private Player player;
+    private String searchWord;
+    private String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_tracks);
 
-        System.out.println("I have entered DisplayTrackActivity!");
-
-        Intent intent = getIntent();
-        String searchWord = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-        String accessToken = intent.getStringExtra(MainActivity.ACCESS_TOKEN_MESSAGE);
-
+        getExtrasFromIntent();
         player = createPlayer(accessToken);
 
         System.out.println("Searchword retrieved and is: " + searchWord);
 
         spotifyApiController = new SpotifyApiController();
         List<Track> tracks = spotifyApiController.getTracksList(searchWord);
+
         System.out.println("SIZE OF LIST OF TRACKS: " + tracks.size());
-        ArrayAdapter<Track> itemsAdapter = getTrackArrayAdapter(tracks);
+
+        makeAndSetAdapterInListView(tracks);
+    }
+
+    private void makeAndSetAdapterInListView(List<Track> tracks) {
+        ArrayAdapter<Track> trackArrayAdapter = getTrackArrayAdapter(tracks);
         final ListView listView = (ListView) findViewById(R.id.list);
-        listView.setAdapter(itemsAdapter);
+        listView.setAdapter(trackArrayAdapter);
 
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,6 +69,12 @@ public class DisplayTracksActivity extends AppCompatActivity implements PlayerNo
                 player.play(track.uri);
             }
         });
+    }
+
+    private void getExtrasFromIntent() {
+        Intent intent = getIntent();
+        searchWord = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        accessToken = intent.getStringExtra(MainActivity.ACCESS_TOKEN_MESSAGE);
     }
 
     private Player createPlayer(String accessToken) {

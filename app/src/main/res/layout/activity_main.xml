@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/textOnTop"
-        android:id="@+id/textView2"
+        android:id="@+id/textViewOnTop"
         android:layout_above="@+id/textSearch"
         android:layout_alignLeft="@+id/buttonGoFind"
         android:layout_alignStart="@+id/buttonGoFind"

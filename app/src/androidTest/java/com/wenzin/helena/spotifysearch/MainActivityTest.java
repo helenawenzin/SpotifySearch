@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-/**
- * Created by Helena on 2016-05-07.
- */
-public class MainActivtityTest extends ActivityUnitTestCase<MainActivity> {
-    public MainActivtityTest() {
+public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
+    public MainActivityTest() {
         super(MainActivity.class);
     }
 
@@ -45,6 +43,9 @@ public class MainActivtityTest extends ActivityUnitTestCase<MainActivity> {
 
         EditText targetEditText = (EditText) activity.findViewById(R.id.textSearch);
         assertEquals("", targetEditText.getText().toString());
+
+        ImageView targetImage = (ImageView) activity.findViewById(R.id.imageSpotifyIcon);
+        assertNotNull(targetImage);
 
     }
 

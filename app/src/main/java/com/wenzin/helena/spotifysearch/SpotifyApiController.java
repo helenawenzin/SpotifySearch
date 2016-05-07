@@ -22,8 +22,14 @@ public class SpotifyApiController {
 
     public List<Track> getTracksList(String searchWord) {
 
-        TracksPager result;
         List<Track> tracks = new ArrayList<>();
+
+        if (searchWord == null || searchWord.equals("") ) {
+            return tracks;
+        }
+
+        TracksPager result;
+
         Hashtable<String,String> params = new Hashtable<String,String>();
         params.put("word", searchWord);
         params.put("offset", String.valueOf(0));

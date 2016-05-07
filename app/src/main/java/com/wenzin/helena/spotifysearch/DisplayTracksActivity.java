@@ -1,5 +1,6 @@
 package com.wenzin.helena.spotifysearch;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Track;
 
-public class DisplayTracksActivity extends AppCompatActivity implements PlayerNotificationCallback {
+public class DisplayTracksActivity extends Activity implements PlayerNotificationCallback {
 
     private SpotifyApiController spotifyApiController;
     private Player player;

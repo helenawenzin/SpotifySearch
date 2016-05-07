@@ -1,6 +1,7 @@
 package com.wenzin.helena.spotifysearch;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -64,13 +65,16 @@ public class MainActivity extends Activity implements ConnectionStateCallback {
     }
 
     public void goFindTracks(View view) {
-        startActivity(getDisplayTracksIntent());
+        String searchWordForIntent = "";
+        searchWordForIntent = searchWord.getText().toString();
+        String accessTokenForIntent = accessToken;
+        startActivity(getDisplayTracksIntent(this, searchWordForIntent, accessTokenForIntent));
     }
 
     @NonNull
-    private Intent getDisplayTracksIntent() {
-        Intent intent = new Intent(this, DisplayTracksActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, searchWord.getText().toString());
+    public static Intent getDisplayTracksIntent(Context context, String searchWord, String accessToken) {
+        Intent intent = new Intent(context, DisplayTracksActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, searchWord);
         intent.putExtra(ACCESS_TOKEN_MESSAGE, accessToken);
         return intent;
     }

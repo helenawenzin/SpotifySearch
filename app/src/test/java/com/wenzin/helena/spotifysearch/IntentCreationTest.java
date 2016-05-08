@@ -22,9 +22,5 @@ public class IntentCreationTest {
     public void intentShouldBeCreatedWithExtras() {
         Intent intent = MainActivity.getDisplayTracksIntent(context, "happy", "accessToken");
         assertNotNull(intent);
-        //Bundle extras = intent.getExtras();
-        //assertNotNull(extras);
-        //assertEquals("query", extras.getString("QUERY"));
-        //assertEquals("value", extras.getString("VALUE"));
     }
 }

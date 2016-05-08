@@ -28,20 +28,20 @@ public class SpotifyApiController {
             return tracks;
         }
 
-        TracksPager result;
+        TracksPager tracksPager;
 
-        Hashtable<String,String> params = new Hashtable<String,String>();
+        Hashtable<String,String> params = new Hashtable<>();
         params.put("word", searchWord);
         params.put("offset", String.valueOf(0));
 
         try {
-            GogetTracks goGetTracksFromSpotify = new GogetTracks();
-            result = goGetTracksFromSpotify.execute(params).get();
-            tracks = result.tracks.items;
+            SearchTracksTask searchTracksTask = new SearchTracksTask();
+            tracksPager = searchTracksTask.execute(params).get();
+            tracks = tracksPager.tracks.items;
             params.put("offset", String.valueOf(50));
-            goGetTracksFromSpotify = new GogetTracks();
-            result = goGetTracksFromSpotify.execute(params).get();
-            tracks.addAll(result.tracks.items);
+            searchTracksTask = new SearchTracksTask();
+            tracksPager = searchTracksTask.execute(params).get();
+            tracks.addAll(tracksPager.tracks.items);
         } catch (InterruptedException e) {
             // TODO Implement exception handling
             e.printStackTrace();
@@ -52,7 +52,7 @@ public class SpotifyApiController {
         return tracks;
     }
 
-    private class GogetTracks extends AsyncTask<Hashtable<String,String>, Void, TracksPager> {
+    private class SearchTracksTask extends AsyncTask<Hashtable<String,String>, Void, TracksPager> {
 
         TracksPager tracks;
 
@@ -68,7 +68,6 @@ public class SpotifyApiController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("STATUS FOR TRACKS = " + tracks.toString());
             return tracks;
         }
     }
